@@ -7,6 +7,7 @@ export default defineConfig({
     __CDP__: true,
     __TEST_NM_HIDDEN__: false,
     __EXTRA_COPY_IDS__: [],
+    __MISES__: false,
   },
   test: {
     environment: "node",

@@ -24,3 +24,12 @@ declare const __EXTRA_COPY_IDS__: readonly string[];
  * `__facetTestNmHidden` are not in a release bundle (scripts/check-store.mjs and check-lite.mjs check).
  */
 declare const __TEST_NM_HIDDEN__: boolean;
+
+/**
+ * `true` only in the Mises edition (wxt.config.ts): Mises Browser on Android rejects
+ * `chrome.scripting.registerContentScripts` ("Internal error" — its scripting API does not
+ * implement dynamic registration, and the MAIN-world shim cannot run there at all), so the
+ * beacon is registered statically in the manifest instead and the dynamic lifecycle is a
+ * no-op (content-scripts.ts). `false` everywhere else.
+ */
+declare const __MISES__: boolean;

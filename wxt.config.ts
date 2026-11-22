@@ -141,6 +141,7 @@ export default defineConfig({
       __CDP__: JSON.stringify(cdp),
       __TEST_NM_HIDDEN__: JSON.stringify(grantNativeMessaging),
       __EXTRA_COPY_IDS__: JSON.stringify(extraCopyIds),
+      __MISES__: JSON.stringify(edition === "mises"),
     },
   }),
   hooks: {
@@ -213,5 +214,23 @@ export default defineConfig({
         { id: "facet_defaults", enabled: true, path: "rules/defaults.json" },
       ],
     },
+    // Mises only: `chrome.scripting.registerContentScripts` fails there with "Internal error"
+    // (its scripting API does not implement dynamic registration), so the beacon is registered
+    // statically instead and the dynamic lifecycle is a no-op (`__MISES__`, content-scripts.ts).
+    // Beacon only — the MAIN-world shim cannot run on Mises at all, so cookie-based multi-login
+    // works (beacon + DNR) while the shim's window.open / storage patching does not.
+    ...(edition === "mises"
+      ? {
+          content_scripts: [
+            {
+              matches: ["<all_urls>"],
+              js: ["beacon.js"],
+              run_at: "document_start",
+              all_frames: true,
+              match_about_blank: true,
+            },
+          ],
+        }
+      : {}),
   },
 });

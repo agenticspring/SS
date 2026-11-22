@@ -20,6 +20,9 @@ export interface RegisteredScript {
   persistAcrossSessions: boolean;
 }
 
+// Mises edition: beacon only. The MAIN-world shim cannot run on Mises Browser (Android),
+ // and `registerContentScripts` fails there outright, so the beacon is registered statically
+ // in the manifest instead and the lifecycle below never touches the scripting API.
 export const CONTENT_SCRIPTS: readonly RegisteredScript[] = [
   {
     id: "facet-beacon",
@@ -31,16 +34,20 @@ export const CONTENT_SCRIPTS: readonly RegisteredScript[] = [
     world: "ISOLATED",
     persistAcrossSessions: true,
   },
-  {
-    id: "facet-shim",
-    js: ["shim.js"],
-    matches: ["<all_urls>"],
-    runAt: "document_start",
-    allFrames: true,
-    matchOriginAsFallback: true,
-    world: "MAIN",
-    persistAcrossSessions: true,
-  },
+  ...(__MISES__
+    ? []
+    : [
+        {
+          id: "facet-shim",
+          js: ["shim.js"],
+          matches: ["<all_urls>"],
+          runAt: "document_start",
+          allFrames: true,
+          matchOriginAsFallback: true,
+          world: "MAIN",
+          persistAcrossSessions: true,
+        } satisfies RegisteredScript,
+      ]),
 ];
 
 const SCRIPT_IDS = CONTENT_SCRIPTS.map((s) => s.id);
@@ -238,6 +245,14 @@ export class ContentScriptLifecycle {
 
   /** Reads what Chrome has registered (call before `ServiceWorkerPolicy.load`, which needs `beaconRules`). */
   async readRegistered(): Promise<ScriptScope> {
+    // Mises: the beacon is registered statically in the manifest, so there is nothing to
+    // read — and calling the scripting API here is pointless. Scope is always "all".
+    if (__MISES__) {
+      this.scope = "all";
+      this.matchesKey = "";
+      this.beaconOn = true;
+      return this.scope;
+    }
     try {
       const existing = await this.deps.scripting.getRegisteredContentScripts({
         ids: SCRIPT_IDS,
@@ -284,6 +299,14 @@ export class ContentScriptLifecycle {
    */
   async start(): Promise<void> {
     this.loaded = true;
+    // Mises: no dynamic registration at all (it fails with "Internal error"); the static
+    // beacon is always on, so pin the scope and just make sure its answers are installed.
+    if (__MISES__) {
+      this.scope = "all";
+      this.beaconOn = true;
+      await this.deps.setBeaconRules(true);
+      return;
+    }
     await this.enqueue(async () => {
       await this.apply(this.wanted(), { initial: true });
       // The static ruleset's state is not read back (an update may have enabled it again): set both kinds once.
@@ -442,6 +465,17 @@ export class ContentScriptLifecycle {
     target: ScriptScope,
     options: { initial?: boolean } = {},
   ): Promise<void> {
+    // Mises: the beacon is statically registered and always on; never call the scripting
+    // API here (it fails with "Internal error" and spams the errors page on every retry).
+    if (__MISES__) {
+      this.scope = "all";
+      this.matchesKey = "";
+      if (!this.beaconOn) {
+        await this.deps.setBeaconRules(true);
+        this.beaconOn = true;
+      }
+      return;
+    }
     // Re-read inside the queue: `all` asked by `ensure` must never be lowered by a decision taken before it.
     if (target !== "all" && RANK[this.wanted()] > RANK[target])
       target = this.wanted();
