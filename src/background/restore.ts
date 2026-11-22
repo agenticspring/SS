@@ -704,9 +704,13 @@ export class TabRestore {
   private async reloadIfBlocked(tabId: number): Promise<void> {
     const now = Date.now();
     if (now - (this.reloadedAt.get(tabId) ?? 0) < RELOAD_GUARD_MS) return;
-    const frame = await this.deps.b.webNavigation
-      .getFrame({ tabId, frameId: 0 })
-      .catch(() => null);
+    // `chrome.webNavigation` does not exist on some Chromium forks (Mises Browser on Android):
+    // without the `?.` this throws "Cannot read properties of undefined (reading 'getFrame')".
+    // With no frame info the tab is treated as not failed; a tab recorded as blocked still reloads.
+    const frame =
+      (await this.deps.b.webNavigation
+        ?.getFrame({ tabId, frameId: 0 })
+        .catch(() => null)) ?? null;
     const noted = this.blocked.get(tabId);
     const failed =
       frame?.errorOccurred === true &&
