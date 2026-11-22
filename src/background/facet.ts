@@ -183,15 +183,36 @@ export class Facet {
       setBeaconRules: async (on) => {
         const dnr = b.declarativeNetRequest;
         // On: the answers before any script can ask. Off: only after the scripts are gone (the lifecycle's order).
-        if (on)
-          await dnr.updateEnabledRulesets({
-            enableRulesetIds: [DEFAULT_BEACON_RULESET],
-          });
+        // Mises: the static ruleset is already enabled in the manifest, and Mises rejects
+        // `updateEnabledRulesets` with "Internal error" — which used to surface, mislabelled,
+        // as "content-script registration failed" and fail worker startup. Skip it there.
+        // A failure to flip the ruleset must not fail startup anywhere: log it and continue
+        // (the ruleset stays as the manifest left it).
+        if (!__MISES__ && on)
+          await dnr
+            .updateEnabledRulesets({
+              enableRulesetIds: [DEFAULT_BEACON_RULESET],
+            })
+            .catch((error) =>
+              this.log(
+                "warn",
+                "could not enable the beacon ruleset",
+                String(error),
+              ),
+            );
         await this.swPolicy.setBeacon(on);
-        if (!on)
-          await dnr.updateEnabledRulesets({
-            disableRulesetIds: [DEFAULT_BEACON_RULESET],
-          });
+        if (!__MISES__ && !on)
+          await dnr
+            .updateEnabledRulesets({
+              disableRulesetIds: [DEFAULT_BEACON_RULESET],
+            })
+            .catch((error) =>
+              this.log(
+                "warn",
+                "could not disable the beacon ruleset",
+                String(error),
+              ),
+            );
       },
       usage: () => ({
         tabs: this.tabs.entries().length,
@@ -345,9 +366,11 @@ export class Facet {
       this.restore.afterLoad();
     }
     // Registered iff containers are in use, derived from the tab registry and the restore state just loaded.
+    // (Labelled "lifecycle", not "registration": on Mises nothing is registered — the start step is the beacon
+    // rules — and a failure there used to be misreported as a content-script failure.)
     await this.scripts
       .start()
-      .catch(logFailure(this.log, "content-script registration failed"));
+      .catch(logFailure(this.log, "content-script lifecycle failed to start"));
     this.log(
       "info",
       `ready: ${this.containers.list().length} containers, ${this.tabs.entries().length} tabs`,
