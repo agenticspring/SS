@@ -10,15 +10,15 @@
     "containers"
   ],
   "license": "MIT",
-  "author": "Taras Misiuk",
+  "author": "agenticspring",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Misyuk-T/splitsession.git",
+    "url": "git+https://github.com/agenticspring/SS.git",
     "directory": "bridge"
   },
-  "homepage": "https://github.com/Misyuk-T/splitsession/blob/main/docs/agents.md",
+  "homepage": "https://github.com/agenticspring/SS/blob/main/docs/agents.md",
   "bugs": {
-    "url": "https://github.com/Misyuk-T/splitsession/issues"
+    "url": "https://github.com/agenticspring/SS/issues"
   },
   "type": "module",
   "bin": {

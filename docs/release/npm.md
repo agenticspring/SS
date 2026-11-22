@@ -13,7 +13,7 @@ Check with `npm pack --dry-run` in `bridge/` (4 files).
 1. An npm account with two-factor authentication on (`npm profile enable-2fa auth-and-writes`). Log in: `npm login`;
    check: `npm whoami`.
 2. The name must be free: `npm view splitsession-bridge` should answer `E404`. If it is taken, pick a scoped name
-   (`@misyuk-t/splitsession-bridge`), change `name` in `bridge/package.json`, and replace `npx splitsession-bridge` in
+   (`splitsession-bridge`), change `name` in `bridge/package.json`, and replace `npx splitsession-bridge` in
    `src/ui/options/BridgeSection.tsx`, `bridge/src/mcp.ts`, `bridge/src/cli.ts` (usage text), the docs and the e2e specs.
 
 ## Each release
@@ -78,8 +78,8 @@ never your real config: `HOME=$(mktemp -d) node bridge/dist/splitsession-bridge.
   `splitsession` key), so a change to `clients.ts` is a user-facing change: mention it in the release notes. The formats
   (VS Code `servers` + `type: "stdio"`, Codex `[mcp_servers.<name>]`, others `mcpServers`) are those documented by each
   client when this was written; if one changes, `clients.ts` is the only place to fix.
-- Two extension IDs are Full since 2026-10-27: the Chrome Web Store item (`hhodioekcdmhpocjbkjnblmbmchddphf`) and the
-  unpacked Full (`hapfikidacgfgnnajkgnaednpgnhmffk`). From 0.4.0 the package allows both by default
+- Two extension IDs are Full since 2026-10-27: the Chrome Web Store item (`jmholfbgnpfgojhhghiokddfmmcnpcke`) and the
+  unpacked Full (`jmholfbgnpfgojhhghiokddfmmcnpcke`). From 0.4.0 the package allows both by default
   (`ALLOWED_EXTENSION_IDS` in `src/bridge/protocol.ts`); `--extension-id` adds a third. **Publish 0.4.0 before (or with)
   the store update**: a host installed by 0.3.x allows only the unpacked ID, so store users need 0.4.0, and the
   extension's "How to connect" runs `npx splitsession-bridge install`, which takes the latest published version.

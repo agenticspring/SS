@@ -20,7 +20,7 @@ import { chromium } from "@playwright/test";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const out = resolve(process.argv[2] ?? resolve(root, "docs/screenshots"));
 const extension = resolve(root, ".output/chrome-mv3");
-const EXT_ID = "hapfikidacgfgnnajkgnaednpgnhmffk";
+const EXT_ID = "jmholfbgnpfgojhhghiokddfmmcnpcke";
 const PORT = 47399;
 mkdirSync(out, { recursive: true });
 

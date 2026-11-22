@@ -318,7 +318,7 @@ far less). Deleting a container closes its tabs and forgets its cookies, but lea
 **Two copies of SplitSession in one profile.** Not supported: both rewrite `Cookie` headers, both capture `Set-Cookie` into
 their own jars and both run the tab-group guard, so logins do not stick and tabs reload in a loop. SplitSession warns about
 it (the popup, and Settings > General) when it can see the other copy: each copy answers one ping from the other known IDs
-(the Chrome Web Store item and the unpacked Full) and pings them itself, through `externally_connectable` (no permission). It does not
+(only this fork's own ID) and pings it itself, through `externally_connectable` (no permission). It does not
 cover two **unpacked Lites**: an unpacked extension's ID comes from its folder's path, so no copy can know it in advance
 (an unpacked Lite does find the store item and the unpacked Full, and those two find each other: the store Full and an
 unpacked Full in one profile are warned about like any two copies). It also cannot see a copy from before this check existed (it does not answer the ping), and finds a

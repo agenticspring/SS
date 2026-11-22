@@ -4,7 +4,7 @@
   "private": true,
   "description": "Same site, separate logins: several accounts of one site open side by side in one Chrome profile.",
   "license": "MIT",
-  "author": "Taras Misiuk",
+  "author": "agenticspring",
   "type": "module",
   "packageManager": "pnpm@10.34.5",
   "engines": {

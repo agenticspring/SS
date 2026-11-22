@@ -8,11 +8,11 @@ layout: page
 
 Effective date: 2026-10-27
 
-SplitSession is a free, open-source Chrome extension by Taras Misiuk that lets you keep several accounts of the same
+SplitSession is a free, open-source Chrome extension (SS fork by agenticspring, based on SplitSession by Taras Misiuk) that lets you keep several accounts of the same
 website signed in side by side ("containers"). This policy covers both editions: **Lite** (containers only) and **Full**
 (containers plus an optional local AI agent bridge). The Chrome Web Store item "SplitSession: Multiple Logins per Site"
 carried Lite up to version 0.1.x and carries **Full** from the update that adds the agent bridge (announced in the extension
-beforehand); Full is also available from GitHub. The source code is public: <https://github.com/Misyuk-T/splitsession>.
+beforehand); Full is also available from GitHub. The source code is public: <https://github.com/agenticspring/SS>.
 
 ## In short
 
@@ -146,4 +146,4 @@ Material changes will be mentioned in the release notes, and the effective date 
 
 ## Contact
 
-Questions or concerns: open an issue at <https://github.com/Misyuk-T/splitsession/issues>.
+Questions or concerns: open an issue at <https://github.com/agenticspring/SS/issues>.

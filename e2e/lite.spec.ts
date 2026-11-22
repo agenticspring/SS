@@ -234,10 +234,7 @@ test.describe("Lite edition", () => {
     await expect(popup.getByRole("switch")).toHaveCount(0);
     await expect(popup.getByRole("button", { name: /MCP/ })).toHaveCount(0); // no agent entry point in Lite
     await expect(popup.getByText("MCP")).toHaveCount(0);
-    await expect(popup.getByTestId("popup-support")).toHaveAttribute(
-      "aria-label",
-      "Support development on Ko-fi",
-    ); // the support cup is in both editions
+    await expect(popup.getByTestId("popup-support")).toHaveCount(0); // no support cup in the SS fork
 
     const font = await popup.evaluate(async () => {
       await document.fonts.ready;

@@ -84,7 +84,7 @@ export class BridgeRouter {
       : undefined;
     if (!handler)
       throw new ToolError(
-        `${tool} is not available in basic mode (this SplitSession has no debugger permission). It needs the full-mode build: the unpacked Full from https://github.com/Misyuk-T/splitsession`,
+        `${tool} is not available in basic mode (this SplitSession has no debugger permission). It needs the full-mode build: the unpacked Full from https://github.com/agenticspring/SS`,
       );
     return handler(this.c, a, meta);
   }

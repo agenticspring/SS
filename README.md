@@ -4,12 +4,10 @@
 
 ![Two accounts, side by side: open the popup, add a Work container, sign in as a brand account on the same social site, post, switch between the two tabs](docs/media/how-it-works.gif)
 
-[![CI](https://github.com/Misyuk-T/splitsession/actions/workflows/ci.yml/badge.svg)](https://github.com/Misyuk-T/splitsession/actions/workflows/ci.yml)
+[![CI](https://github.com/agenticspring/SS/actions/workflows/ci.yml/badge.svg)](https://github.com/agenticspring/SS/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![npm: splitsession-bridge](https://img.shields.io/npm/v/splitsession-bridge?label=npm%20bridge)](https://www.npmjs.com/package/splitsession-bridge)
-[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/hhodioekcdmhpocjbkjnblmbmchddphf?label=chrome%20web%20store)](https://chromewebstore.google.com/detail/splitsession-multiple-log/hhodioekcdmhpocjbkjnblmbmchddphf)
-[![Website](https://img.shields.io/badge/site-misyuk--t.github.io-black)](https://misyuk-t.github.io/splitsession/)
-[![Ko-fi](https://img.shields.io/badge/support-Ko--fi-black)](https://ko-fi.com/tomashdev)
+[![Website](https://img.shields.io/badge/site-misyuk--t.github.io-black)](https://agenticspring.github.io/SS/)
 
 SplitSession is an open-source Manifest V3 extension that brings Firefox-style containers to Chrome. Keep several accounts of the same site open **side by side, in different tabs of one Chrome profile**: two Reddit accounts, a work and a personal Supabase, all logged in at the same moment, with no second profile and no second browser. Each container has its own cookies and page storage; a tab belongs to one container, and everything that tab does happens inside it.
 
@@ -36,28 +34,19 @@ More detail: [docs/features.md](docs/features.md).
 | Containers, isolation, tab groups, rules, restore, export / import | yes | yes |
 | Local AI agent bridge (MCP), off by default | no | yes |
 | Extra permissions | none | `nativeMessaging`, `debugger` (unpacked Full). In the Chrome Web Store build `nativeMessaging` is optional, and `debugger` depends on the version: a version without it runs the agent bridge in a basic mode (no `run_js`, key presses, console or network; script-sent clicks), a version with it has the full tool list including `run_js`. The extension's details page in `chrome://extensions` shows whether it has the debugger |
-| Where | build from source | Chrome Web Store, GitHub Releases |
+| Where | build from source | GitHub Releases (agenticspring/SS) |
 
-The Chrome Web Store item carried Lite up to 0.1.x and carries Full from the update that adds the agent bridge (one item,
-updated in place: containers and settings carry over). That update adds no required permission and disables nobody:
-containers keep working. The one optional permission, `nativeMessaging`, is asked only when you switch the agent bridge on
-(Chrome's own prompt; SplitSession then restarts itself once to finish turning it on). The bridge stays off until you switch
-it on and accept what it allows. Lite remains in the code base (its agent code is not compiled in) but is no longer
-uploaded.
+SS fork: no Chrome Web Store item. Full is built from source / GitHub Releases only.
 
-Full has one of two extension IDs: `hhodioekcdmhpocjbkjnblmbmchddphf` from the store, `hapfikidacgfgnnajkgnaednpgnhmffk`
-loaded unpacked (pinned by the manifest key). The bridge program (`npx splitsession-bridge install`, 0.4 or newer) accepts
-both.
+Full has one extension ID: `jmholfbgnpfgojhhghiokddfmmcnpcke`, loaded unpacked (pinned by the manifest key, generated for this fork).
 
 ## Install
-
-**Chrome Web Store, the easy way:** [SplitSession: Multiple Logins per Site](https://chromewebstore.google.com/detail/splitsession-multiple-log/hhodioekcdmhpocjbkjnblmbmchddphf). One click, updates automatically.
 
 **From GitHub Releases** (Full, loaded unpacked; it never updates by itself):
 
 ![Install from a GitHub Release: download the zip, unzip it, open chrome://extensions, turn on Developer mode, Load unpacked, pin the toolbar button](docs/media/install.gif)
 
-1. Download `splitsession-full-<version>.zip` from [Releases](https://github.com/Misyuk-T/splitsession/releases) and unzip it. (`splitsession-store-<version>.zip` is the package uploaded to the Chrome Web Store, without the manifest key; `splitsession-lite-<version>.zip` is Lite.)
+1. Download `splitsession-full-<version>.zip` from [Releases](https://github.com/agenticspring/SS/releases) and unzip it. (`splitsession-lite-<version>.zip` is Lite.)
 2. Open `chrome://extensions` and turn on *Developer mode*.
 3. Choose *Load unpacked*.
 4. Select the unzipped folder.
@@ -126,7 +115,7 @@ Layout, editions, the end-to-end stand and releases: [docs/development.md](docs/
 
 ## Support
 
-SplitSession is free and MIT-licensed. If it saves you a second browser profile, you can [buy me a coffee on Ko-fi](https://ko-fi.com/tomashdev).
+SplitSession is free and MIT-licensed. SS fork by agenticspring, based on SplitSession (MIT, Taras Misiuk).
 
 ## License
 

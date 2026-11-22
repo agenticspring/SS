@@ -187,10 +187,9 @@ const tabsOf =
   };
 
 describe("the host's callers", () => {
-  it("runs for the Chrome Web Store item and for the unpacked Full, and refuses any other extension", async () => {
+  it("runs for the unpacked Full, and refuses any other extension", async () => {
     expect(ALLOWED_EXTENSION_ORIGINS).toEqual([
-      "chrome-extension://hhodioekcdmhpocjbkjnblmbmchddphf/",
-      "chrome-extension://hapfikidacgfgnnajkgnaednpgnhmffk/",
+      "chrome-extension://jmholfbgnpfgojhhghiokddfmmcnpcke/",
     ]);
     const dir = tmp();
     const env = { FACET_BRIDGE_SOCKET: path.join(dir, "bridge.sock") };

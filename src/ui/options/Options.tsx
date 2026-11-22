@@ -80,12 +80,12 @@ export const Options = () => {
       <footer class="opt-foot fx-secondary">
         SplitSession is free and open source.{" "}
         <a
-          href="https://ko-fi.com/tomashdev/tip"
+          href="https://github.com/agenticspring/SS"
           target="_blank"
           rel="noopener noreferrer"
           data-testid="support-link"
         >
-          Support development ♡
+          agenticspring/SS
         </a>
       </footer>
     </div>

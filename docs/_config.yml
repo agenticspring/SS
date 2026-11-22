@@ -1,9 +1,9 @@
 # GitHub Pages (Settings > Pages > Deploy from a branch > main, /docs).
 # Home: docs/index.html (static, no front matter). Privacy policy: docs/privacy.md rendered with docs/_layouts/page.html
-# at https://misyuk-t.github.io/splitsession/privacy. Shared styles and the self-hosted Inter font live in docs/assets/.
+# at https://agenticspring.github.io/SS/privacy. Shared styles and the self-hosted Inter font live in docs/assets/.
 title: SplitSession
 description: Same site, separate logins. Containers for Chrome.
-url: https://misyuk-t.github.io
+url: https://agenticspring.github.io
 baseurl: /splitsession
 markdown: kramdown
 exclude:

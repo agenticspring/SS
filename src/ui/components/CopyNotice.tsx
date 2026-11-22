@@ -22,12 +22,11 @@ export function useOtherCopies(): OtherCopy[] {
 }
 
 const SOURCE = {
-  store: ", Chrome Web Store",
   unpacked: ", unpacked",
   other: "",
 } as const;
 
-/** "Full 0.1.13, Chrome Web Store": the store item and the unpacked Full can both be Full, so the source tells them apart. */
+/** "Full 0.2.1, unpacked": the source tells copies apart. */
 const label = (c: OtherCopy) =>
   `${c.edition === "full" ? "Full" : "Lite"} ${c.version}${SOURCE[copySource(c.id)]}`;
 

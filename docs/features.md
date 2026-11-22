@@ -43,7 +43,7 @@ One codebase, two editions. **Lite** is containers only; it was the Chrome Web S
 | Agent activity display (glow, label, toolbar dot that blinks when the agent acts on a tab) | not in the bundle | yes |
 | "Show the container name to pages" (`data-ctr`, `[name]` title prefix), off by default | not in the bundle | yes |
 | Extra permissions | none | `nativeMessaging`, `debugger` (unpacked Full); the Chrome Web Store build: optional `nativeMessaging` only, no `debugger` (agent bridge in basic mode, docs/agents.md) |
-| Extension ID | path-derived (local build) | Chrome Web Store: `hhodioekcdmhpocjbkjnblmbmchddphf`; unpacked: fixed `hapfikidacgfgnnajkgnaednpgnhmffk` |
+| Extension ID | path-derived (local build) | unpacked: fixed `jmholfbgnpfgojhhghiokddfmmcnpcke` (SS fork key) |
 | Build output | `.output/lite/chrome-mv3` | `.output/chrome-mv3` (unpacked, with the key), `.output/store/chrome-mv3` (store package, no key) |
 
 Lite is not a Full build with the settings hidden: the agent code is not compiled into it, and `scripts/check-lite.mjs` fails the Lite build if any bridge, CDP or native-messaging marker, or any of the three Full-only permissions, ends up in the bundle. The two editions have different IDs and can be installed side by side, but do not run both on the same sites at once: each would isolate its own tabs.
@@ -54,4 +54,4 @@ SplitSession requests access to all sites, because rewriting request headers per
 
 ## Project status
 
-Beta, version 0.1. SplitSession is on the [Chrome Web Store](https://chromewebstore.google.com/detail/splitsession-multiple-log/hhodioekcdmhpocjbkjnblmbmchddphf). The interface and the isolation engine are stable enough for daily use by the author, and the open items are real-site verification and the limits in [limits.md](limits.md).
+Beta, version 0.1. SplitSession is on the [Chrome Web Store](https://chromewebstore.google.com/detail/splitsession-multiple-log/jmholfbgnpfgojhhghiokddfmmcnpcke). The interface and the isolation engine are stable enough for daily use by the author, and the open items are real-site verification and the limits in [limits.md](limits.md).

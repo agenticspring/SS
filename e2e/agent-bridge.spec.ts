@@ -772,7 +772,7 @@ test.describe("agent bridge", () => {
       options.getByRole("link", { name: /full guide on GitHub/ }),
     ).toHaveAttribute(
       "href",
-      "https://github.com/Misyuk-T/splitsession/blob/main/docs/agents.md",
+      "https://github.com/agenticspring/SS/blob/main/docs/agents.md",
     );
     await expect(options.getByTestId("bridge-guide-status")).toContainText(
       "not installed",

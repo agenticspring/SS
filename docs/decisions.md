@@ -355,7 +355,7 @@ Mac) sees and operates Chrome tabs across all windows, container-aware. The user
 
 ### Transport
 - **Native Messaging + Unix socket**, not a localhost WebSocket. A TCP port can be probed by every web page and by every
-  user on the machine; Native Messaging is pinned by the browser to `allowed_origins: [chrome-extension://hapfikidacgfgnnajkgnaednpgnhmffk/]`
+  user on the machine; Native Messaging is pinned by the browser to `allowed_origins: [chrome-extension://jmholfbgnpfgojhhghiokddfmmcnpcke/]`
   (the ID is fixed by the manifest key), and the host double-checks the origin argument. The socket is 0600 in a 0700
   directory. One program, two modes: `host` (Chrome-launched) and `mcp` (Claude-launched), bundled by esbuild into one
   file with the MCP SDK inside (no `node_modules` at run time).
@@ -935,7 +935,7 @@ everything. Both names are placeholders until the final one is picked; they live
 - **Entrypoints.** `state` is dropped from the Lite build by the `entrypoints:found` hook: no file, no manifest entry, and
   no link to it (the popup's "More" menu, whose other item would have been alone and disabled, and so unopenable, becomes a
   plain "Re-group tabs" button in Lite).
-- **Different extension IDs.** Full keeps the pinned `key` (`hapfikidacgfgnnajkgnaednpgnhmffk`: the author's install, the e2e
+- **Different extension IDs.** Full keeps the pinned `key` (`jmholfbgnpfgojhhghiokddfmmcnpcke`: the author's install, the e2e
   suite and the bridge's native-host manifest depend on it). Lite has no `key`: the Web Store assigns its own ID on upload (a
   pinned key is of no use there), a local unpacked Lite gets a path-derived ID. So both install side by side. A pinned
   Lite key can still be added later (a separate pair, private half gitignored) if a stable local ID is ever needed.
@@ -1001,7 +1001,7 @@ old host copy in `Application Support/Facet/host` (and the old folder once empty
 `claude mcp add --scope user splitsession -- …` and `claude mcp remove --scope user facet`. `scripts/check-lite.mjs` forbids
 both the new and the old host name in the Lite bundle.
 
-**Deliberately kept, for data compatibility:** the Full extension `key` / ID `hapfikidacgfgnnajkgnaednpgnhmffk` (installed
+**Deliberately kept, for data compatibility:** the Full extension `key` / ID `jmholfbgnpfgojhhghiokddfmmcnpcke` (installed
 extension, containers and cookie jars survive an update); every storage key and page-storage prefix (`__facet:<key>:` in the shim,
 `chrome.storage` keys, `facet-purge` / `facet-bridge-retry` alarms, content-script IDs `facet-beacon` / `facet-shim`,
 `facet_defaults` DNR ruleset); CSS prefix `fx-`; DNR rule ID ranges; message type strings (`facet/api`, `facet/open-tab`, ...,
@@ -1579,8 +1579,8 @@ Goal: a container tab that is not in its container's tab group (dragged out, or 
   the tab-group guard: logins did not stick and tabs reloaded without end. Nothing told the user why.
 - **Decision.** Warn, do not fix. Each copy answers one ping from the other known copies and pings them itself
   (`src/core/copies.ts`, `src/background/copies.ts`): `runtime.onMessageExternal` answers exactly `{ type:
-  "splitsession.ping" }` from the Chrome Web Store Lite (`hhodioekcdmhpocjbkjnblmbmchddphf`) or Full
-  (`hapfikidacgfgnnajkgnaednpgnhmffk`) with `{ type: "splitsession.pong", edition, version }`, and nothing else (no other
+  "splitsession.ping" }` from the Chrome Web Store Lite (`jmholfbgnpfgojhhghiokddfmmcnpcke`) or Full
+  (`jmholfbgnpfgojhhghiokddfmmcnpcke`) with `{ type: "splitsession.pong", edition, version }`, and nothing else (no other
   data, no actions). The popup and Settings > General show a warning with an "Open extensions" button (`tabs.create` of
   `chrome://extensions/?id=<other>`; an extension may open that, a web page may not). Detection runs at install and browser
   start and when the popup or settings open; a found copy is remembered for a minute, "none" for ten seconds (a failed ping
@@ -2077,7 +2077,7 @@ Three additions on top of the tab leases (bridge 0.3.0, together with the leases
 
 ## The store item becomes Full (2026-10-27)
 
-- **Decision (owner, 2026-10-27).** The Chrome Web Store item `hhodioekcdmhpocjbkjnblmbmchddphf` ("SplitSession: Multiple
+- **Decision (owner, 2026-10-27).** The Chrome Web Store item `jmholfbgnpfgojhhghiokddfmmcnpcke` ("SplitSession: Multiple
   Logins per Site", 432 users, live 0.1.7 Lite) is updated **in place** to the Full build. There is no separate Full item.
   Lite stays buildable and tested (`pnpm build:lite`, `e2e/lite.spec.ts`) but is no longer uploaded.
 - **Why.** The developer account's item slot is needed for another extension, and one item for both editions is simpler to
@@ -2092,10 +2092,10 @@ Three additions on top of the tab leases (bridge 0.3.0, together with the leases
   asserts no `key`, `nativeMessaging` and `debugger` present, no "(Full)" in the name, exactly the two known IDs in
   `externally_connectable`, and the consent gate in the bundle. CI attaches `splitsession-store-<version>.zip` to the GitHub
   Release.
-- **Two IDs for Full.** The store ID and the unpacked Full's pinned ID (`hapfikidacgfgnnajkgnaednpgnhmffk`) are both Full now.
+- **Two IDs for Full.** The store ID and the unpacked Full's pinned ID (`jmholfbgnpfgojhhghiokddfmmcnpcke`) are both Full now.
   `ALLOWED_EXTENSION_IDS` (`src/bridge/protocol.ts`) lists both: `splitsession-bridge install` (0.4.0) writes both into
   `allowed_origins`, the host accepts both, `status` marks each one "ok" or "MISSING". `--extension-id` now adds an ID instead
-  of replacing the default. Copy detection (`src/core/copies.ts`: `STORE_ID`, `UNPACKED_FULL_ID`) is unchanged in kind: the
+  of replacing the default. Copy detection (`src/core/copies.ts`: `UNPACKED_FULL_ID`) is unchanged in kind: the
   store Full and an unpacked Full in one profile warn about each other like any two copies (both rewrite cookies), and the
   warning names the source ("Full 0.1.13, Chrome Web Store" / "Full 0.1.12, unpacked"), since the edition alone no longer
   tells them apart.

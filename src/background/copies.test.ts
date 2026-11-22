@@ -1,7 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
 import type { browser } from "wxt/browser";
 
-import { STORE_ID, UNPACKED_FULL_ID } from "../core/copies";
+import { UNPACKED_FULL_ID } from "../core/copies";
+
+/** A different extension ID, standing in for another copy in these tests. */
+const OTHER_ID = "b".repeat(32);
 import { createCopyDetector, registerCopyListeners } from "./copies";
 import { createLogger } from "./log";
 
@@ -51,7 +54,7 @@ describe("onMessageExternal listener", () => {
     const { reply, result } = ask(
       external[0]!,
       { type: "splitsession.ping" },
-      STORE_ID,
+      UNPACKED_FULL_ID,
     );
     expect(reply).toHaveBeenCalledExactlyOnceWith({
       type: "splitsession.pong",
@@ -67,10 +70,10 @@ describe("onMessageExternal listener", () => {
     for (const [message, id] of [
       [{ type: "splitsession.ping" }, "z".repeat(32)],
       [{ type: "splitsession.ping" }, undefined],
-      [{ type: "facet/api", method: "listContainers", args: [] }, STORE_ID],
-      [{ type: "splitsession.ping", more: true }, STORE_ID],
-      ["splitsession.ping", STORE_ID],
-      [undefined, STORE_ID],
+      [{ type: "facet/api", method: "listContainers", args: [] }, OTHER_ID],
+      [{ type: "splitsession.ping", more: true }, OTHER_ID],
+      ["splitsession.ping", OTHER_ID],
+      [undefined, OTHER_ID],
     ] as Array<[unknown, string | undefined]>) {
       const { reply } = ask(external[0]!, message, id);
       expect(reply).not.toHaveBeenCalled();
@@ -82,24 +85,22 @@ describe("detection through the browser", () => {
   it("is none when the other copy is not there", async () => {
     const { b, sent } = fakeBrowser(UNPACKED_FULL_ID);
     expect(await createCopyDetector(b).get()).toEqual([]);
-    expect(sent).toEqual([[STORE_ID, { type: "splitsession.ping" }]]);
+    expect(sent).toEqual([]); // only one known ID, and it is our own: nothing else to ping
   });
 
-  it("finds the other copy that answers with a pong", async () => {
+  it("finds no other copy: the only known ID is our own", async () => {
     const { b } = fakeBrowser(UNPACKED_FULL_ID, {
-      [STORE_ID]: {
+      [OTHER_ID]: {
         type: "splitsession.pong",
         edition: "lite",
         version: "0.1.3",
       },
     });
-    expect(await createCopyDetector(b).get()).toEqual([
-      { id: STORE_ID, edition: "lite", version: "0.1.3" },
-    ]);
+    expect(await createCopyDetector(b).get()).toEqual([]);
   });
 
   it("looks once when the browser starts and logs a warning when it finds a copy", async () => {
-    const { b, started } = fakeBrowser(STORE_ID, {
+    const { b, started } = fakeBrowser(OTHER_ID, {
       [UNPACKED_FULL_ID]: {
         type: "splitsession.pong",
         edition: "full",

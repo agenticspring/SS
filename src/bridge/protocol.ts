@@ -1,18 +1,15 @@
 /** Messages of the SplitSession agent bridge. Shared by the extension, the native host and the MCP server. */
 
-import { STORE_ID, UNPACKED_FULL_ID } from "../core/copies";
+import { UNPACKED_FULL_ID } from "../core/copies";
 
 export const HOST_NAME = "com.splitsession.bridge";
-/** The Chrome Web Store item (Full since 2026-10-27; the store assigns this ID, docs/release/chrome-web-store.md 6.2). */
-export const STORE_EXTENSION_ID = STORE_ID;
-/** Full loaded unpacked: fixed by the manifest key (docs/development.md). */
+/** SS fork's unpacked Full: fixed by the manifest key (docs/development.md). No store item exists for this fork. */
 export const UNPACKED_EXTENSION_ID = UNPACKED_FULL_ID;
 /**
- * The extensions that may start the host: both go into the host manifest's `allowed_origins` (`install`), and the host
- * itself refuses any other caller. `install --extension-id` adds to these, it does not replace them.
+ * The extensions that may start the host: only this fork's ID goes into the host manifest's `allowed_origins`
+ * (`install`), and the host itself refuses any other caller. `install --extension-id` adds to these, it does not replace them.
  */
 export const ALLOWED_EXTENSION_IDS: readonly string[] = [
-  STORE_EXTENSION_ID,
   UNPACKED_EXTENSION_ID,
 ];
 export const ALLOWED_EXTENSION_ORIGINS: readonly string[] =

@@ -43,7 +43,7 @@ Load `.output/chrome-mv3` (Full) or `.output/lite/chrome-mv3` (Lite) via `chrome
 
 One codebase, two editions, three builds (the decisions and their reasons: [decisions.md](decisions.md), "Two editions" and
 "The store item becomes Full"). The build is chosen by the environment variable `FACET_EDITION` (`lite`; `store`, the Full
-code without `key` for the Chrome Web Store item `hhodioekcdmhpocjbkjnblmbmchddphf`; anything else or unset is Full with the
+code without `key` for the Chrome Web Store item `jmholfbgnpfgojhhghiokddfmmcnpcke`; anything else or unset is Full with the
 pinned key), read once in `wxt.config.ts`. Since 2026-10-27 the store item is updated with the `store` build; Lite stays
 buildable and tested but is no longer uploaded. `scripts/check-store.mjs` (run by `build:store`, `zip:store` and CI) fails a
 store package with a `key`, with `nativeMessaging` or `debugger` in `permissions` (the store build adds no required permission over
@@ -139,7 +139,7 @@ Before a public release, on the release commit:
 The **Full** manifest carries a `key` so that the extension ID is the same on every machine and build (Lite has none, see Editions above):
 
 ```
-hapfikidacgfgnnajkgnaednpgnhmffk
+jmholfbgnpfgojhhghiokddfmmcnpcke
 ```
 
 - `extension-key.pub` (committed): base64 public key, read by `wxt.config.ts`.

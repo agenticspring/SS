@@ -18,7 +18,7 @@ import { useBridge } from "../useBridge";
 
 export const INSTALL_COMMAND = "npx splitsession-bridge install";
 const DOCS_URL =
-  "https://github.com/Misyuk-T/splitsession/blob/main/docs/agents.md";
+  "https://github.com/agenticspring/SS/blob/main/docs/agents.md";
 
 const LABEL_MAX = 40;
 // eslint-disable-next-line no-control-regex -- strips control characters from a user-typed label

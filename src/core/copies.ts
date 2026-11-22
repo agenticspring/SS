@@ -6,22 +6,17 @@
  */
 
 /**
- * The Chrome Web Store item, ID assigned by the store. It carried Lite up to 0.1.x and carries Full from the update of
- * 2026-10-27 on (docs/decisions.md, "The store item becomes Full"), so a copy with this ID may be either edition.
+ * SS fork: there is no Chrome Web Store item. The only known copy is this
+ * fork's own unpacked Full, whose ID is fixed by the key in wxt.config.ts
+ * (extension-key.pub, generated for agenticspring/SS). It never pings or
+ * answers the original author's store / unpacked IDs.
  */
-export const STORE_ID = "hhodioekcdmhpocjbkjnblmbmchddphf";
-/** Full loaded unpacked (GitHub Release zip or a checkout): its ID is fixed by the key in wxt.config.ts. */
-export const UNPACKED_FULL_ID = "hapfikidacgfgnnajkgnaednpgnhmffk";
-/**
- * Every ID a copy answers and pings. An unpacked Lite has a path-derived ID nobody can know in advance: it can find these
- * two but cannot be found. The store Full and an unpacked Full in one profile find each other like any two copies (both
- * rewrite cookies, so the warning applies to them as well).
- */
-export const KNOWN_COPY_IDS: readonly string[] = [STORE_ID, UNPACKED_FULL_ID];
+export const UNPACKED_FULL_ID = "jmholfbgnpfgojhhghiokddfmmcnpcke";
+/** Every ID a copy answers and pings: only this fork's own ID. */
+export const KNOWN_COPY_IDS: readonly string[] = [UNPACKED_FULL_ID];
 
-/** Where a copy came from, told by its ID: the store item, the pinned unpacked Full, or another (path-derived) unpacked build. */
-export function copySource(id: string): "store" | "unpacked" | "other" {
-  if (id === STORE_ID) return "store";
+/** Where a copy came from, told by its ID: this fork's unpacked Full, or another (path-derived) unpacked build. */
+export function copySource(id: string): "unpacked" | "other" {
   if (id === UNPACKED_FULL_ID) return "unpacked";
   return "other";
 }

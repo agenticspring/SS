@@ -43,7 +43,7 @@ const bridgeInfo: ToolHandler = async (c) => {
       ? {
           notAvailable: missing,
           basicMode:
-            "Clicks and typing are script events (isTrusted is false), screenshots show only the tab on show, and scripts, dialogs, the console, the network and key presses need full mode: the unpacked Full from https://github.com/Misyuk-T/splitsession",
+            "Clicks and typing are script events (isTrusted is false), screenshots show only the tab on show, and scripts, dialogs, the console, the network and key presses need full mode: the unpacked Full from https://github.com/agenticspring/SS",
         }
       : {}),
   });

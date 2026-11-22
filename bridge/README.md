@@ -38,6 +38,6 @@ replaced atomically; a file that is not plain JSON (comments) is left alone and 
 What it installs: a copy of itself in `~/Library/Application Support/SplitSession/host/` (macOS) or
 `$XDG_CONFIG_HOME/SplitSession/host/` (Linux, default `~/.config`), and the browser's native messaging host manifest
 `com.splitsession.bridge.json`. Full guide, tool list and security model:
-https://github.com/Misyuk-T/splitsession/blob/main/docs/agents.md
+https://github.com/agenticspring/SS/blob/main/docs/agents.md
 
 MIT licensed.

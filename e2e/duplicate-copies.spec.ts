@@ -31,7 +31,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const LITE_PATH = path.join(ROOT, ".output/lite/chrome-mv3");
 const FULL_OUT = path.join(ROOT, ".output/dup-test");
 const FULL_PATH = path.join(FULL_OUT, "chrome-mv3");
-const FULL_ID = "hapfikidacgfgnnajkgnaednpgnhmffk"; // fixed by the extension key (wxt.config.ts)
+const FULL_ID = "jmholfbgnpfgojhhghiokddfmmcnpcke"; // fixed by the extension key (wxt.config.ts)
 const VERSION = (
   JSON.parse(readFileSync(path.join(ROOT, "package.json"), "utf8")) as {
     version: string;

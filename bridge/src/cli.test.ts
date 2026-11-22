@@ -13,7 +13,6 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import {
   ALLOWED_EXTENSION_IDS,
-  STORE_EXTENSION_ID,
   UNPACKED_EXTENSION_ID,
 } from "../../src/bridge/protocol";
 import {
@@ -41,7 +40,6 @@ import {
 
 const EXTENSION_ID = UNPACKED_EXTENSION_ID;
 const BOTH_ORIGINS = [
-  `chrome-extension://${STORE_EXTENSION_ID}/`,
   `chrome-extension://${UNPACKED_EXTENSION_ID}/`,
 ];
 
@@ -181,16 +179,15 @@ describe("AI client snippets", () => {
 });
 
 describe("argument parsing", () => {
-  it("defaults: install -> chrome, no --client given, the store item and the unpacked Full", () => {
+  it("defaults: install -> chrome, no --client given, the unpacked Full", () => {
     const o = parseArgs(["install"], "darwin");
     expect(o).toMatchObject({
       command: "install",
       browsers: ["chrome"],
-      extensionIds: [STORE_EXTENSION_ID, UNPACKED_EXTENSION_ID],
+      extensionIds: [UNPACKED_EXTENSION_ID],
     });
     expect(ALLOWED_EXTENSION_IDS).toEqual([
-      "hhodioekcdmhpocjbkjnblmbmchddphf",
-      "hapfikidacgfgnnajkgnaednpgnhmffk",
+      "jmholfbgnpfgojhhghiokddfmmcnpcke",
     ]);
     expect(o.clients).toBeUndefined();
   });
@@ -239,10 +236,10 @@ describe("argument parsing", () => {
     );
     expect(o.browsers).toEqual(["brave", "edge", "arc"]);
     expect(o.clients).toEqual(["codex"]);
-    // --extension-id adds to the two known IDs, it does not replace them.
+    // --extension-id adds to the known IDs, it does not replace them.
     expect(o.extensionIds).toEqual([...ALLOWED_EXTENSION_IDS, "p".repeat(32)]);
     expect(
-      parseArgs(["install", "--extension-id", STORE_EXTENSION_ID], "darwin")
+      parseArgs(["install", "--extension-id", UNPACKED_EXTENSION_ID], "darwin")
         .extensionIds,
     ).toEqual([...ALLOWED_EXTENSION_IDS]);
   });
@@ -627,7 +624,7 @@ describe("install / uninstall", () => {
 });
 
 describe("status", () => {
-  it("flags a host manifest that lacks one of the two extension IDs (installed by bridge 0.3 or older)", async () => {
+  it("flags a host manifest that lacks the extension ID (installed by bridge 0.3 or older)", async () => {
     const sb = sandbox();
     install(parseArgs(["install", "--client", "none"], "linux"), {
       ...sb.env,
@@ -640,7 +637,7 @@ describe("status", () => {
     const old = JSON.parse(readFileSync(file, "utf8"));
     writeFileSync(
       file,
-      JSON.stringify({ ...old, allowed_origins: [BOTH_ORIGINS[1]] }),
+      JSON.stringify({ ...old, allowed_origins: [] }),
     );
     sb.out.length = 0;
     await status(parseArgs(["status", "--browser", "chrome"], "linux"), {
@@ -648,10 +645,7 @@ describe("status", () => {
       process: { FACET_BRIDGE_SOCKET: path.join(sb.root, "none.sock") },
     });
     expect(sb.text()).toContain(
-      `MISSING the Chrome Web Store extension (${STORE_EXTENSION_ID}): run install again`,
-    );
-    expect(sb.text()).toContain(
-      `ok      the unpacked Full extension (${UNPACKED_EXTENSION_ID})`,
+      `MISSING the unpacked Full extension (${UNPACKED_EXTENSION_ID}): run install again`,
     );
   });
 
@@ -678,9 +672,6 @@ describe("status", () => {
     expect(sb.text()).toContain("host program:  installed");
     expect(sb.text()).toContain("chrome    installed");
     for (const origin of BOTH_ORIGINS) expect(sb.text()).toContain(origin);
-    expect(sb.text()).toContain(
-      `ok      the Chrome Web Store extension (${STORE_EXTENSION_ID})`,
-    );
     expect(sb.text()).toContain(
       `ok      the unpacked Full extension (${UNPACKED_EXTENSION_ID})`,
     );

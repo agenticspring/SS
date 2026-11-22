@@ -11,8 +11,7 @@ the one below.
 Full has one of two extension IDs, depending on where it came from (docs/decisions.md, "The store item becomes Full"):
 
 ```
-EXT = chrome-extension://hhodioekcdmhpocjbkjnblmbmchddphf   (installed from the Chrome Web Store)
-EXT = chrome-extension://hapfikidacgfgnnajkgnaednpgnhmffk   (loaded unpacked: GitHub Release zip or a checkout; fixed by the manifest key)
+EXT = chrome-extension://jmholfbgnpfgojhhghiokddfmmcnpcke   (loaded unpacked: GitHub Release zip or a checkout; fixed by the manifest key)
 ```
 
 Both are the same on every machine. With the bridge on, `bridge_info` prints the ID SplitSession is running with. The
@@ -123,7 +122,7 @@ const context = await chromium.launchPersistentContext('/tmp/profile', {
   args: [`--disable-extensions-except=${ext}`, `--load-extension=${ext}`],
 });
 
-const EXT = 'chrome-extension://hapfikidacgfgnnajkgnaednpgnhmffk';
+const EXT = 'chrome-extension://jmholfbgnpfgojhhghiokddfmmcnpcke';
 const open = (container: string, url: string) =>
   `${EXT}/open.html?container=${encodeURIComponent(container)}&url=${encodeURIComponent(url)}`;
 
@@ -238,8 +237,8 @@ Claude Code --stdio--> splitsession-bridge.mjs mcp --Unix socket--> splitsession
 ```
 
 - **Native Messaging** is Chrome's own mechanism for an extension to talk to a local program. The host manifest pins
-  `allowed_origins` to SplitSession's two IDs (the store item `chrome-extension://hhodioekcdmhpocjbkjnblmbmchddphf/` and the
-  unpacked Full `chrome-extension://hapfikidacgfgnnajkgnaednpgnhmffk/`, `ALLOWED_EXTENSION_IDS` in `src/bridge/protocol.ts`):
+  `allowed_origins` to SplitSession's two IDs (the store item `chrome-extension://jmholfbgnpfgojhhghiokddfmmcnpcke/` and the
+  unpacked Full `chrome-extension://jmholfbgnpfgojhhghiokddfmmcnpcke/`, `ALLOWED_EXTENSION_IDS` in `src/bridge/protocol.ts`):
   no other extension and no web page can start the host or talk to it through Chrome. The host also refuses any other origin.
 - **Consent first.** The switch turns on only after the disclosure dialog was accepted (`agentBridgeConsent` in
   `chrome.storage.local`, with the version of the text). The background enforces it, not just the dialog: `agentBridge: true`

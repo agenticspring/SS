@@ -36,14 +36,12 @@ const pick = async (page: Page, select: string, option: string | RegExp) => {
 };
 
 test.describe("options page", () => {
-  test("the footer has a quiet support link to the Ko-fi tip page", async ({
-    facet,
-  }) => {
+  test("the footer links to the SS repository", async ({ facet }) => {
     const page = await openOptions(facet);
     const link = page.getByTestId("support-link");
     await expect(link).toHaveAttribute(
       "href",
-      "https://ko-fi.com/tomashdev/tip",
+      "https://github.com/agenticspring/SS",
     );
     await expect(link).toHaveAttribute("target", "_blank");
     await expect(link).toHaveAttribute("rel", "noopener noreferrer");

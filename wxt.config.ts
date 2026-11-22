@@ -7,8 +7,7 @@ import { KNOWN_COPY_IDS } from "./src/core/copies";
 
 /**
  * Editions from one codebase (docs/decisions.md, "Two editions" and "The store item becomes Full"). `FACET_EDITION`:
- * `lite` selects Lite; `store` selects the Chrome Web Store package of Full (Full code, no `key`: the store item's ID
- * comes from the store); anything else is Full, the author's daily build (pinned ID) and the default of `pnpm build`,
+ * `lite` selects Lite; `store` selects a keyless package of Full (Full code, no `key`); anything else is Full (pinned ID) and the default of `pnpm build`,
  * `pnpm dev` and the e2e suite. Everything that differs per edition lives in this one table (the product was called
  * Facet until 2026-10-11; see docs/decisions.md, "Rename").
  */
@@ -19,7 +18,7 @@ const EDITIONS = {
     name: "SplitSession (Full)",
     description:
       "Use several accounts of the same site side by side in one Chrome profile. Includes a local AI-agent bridge (off by default).",
-    // Public half of the key pair from `pnpm keygen`; pins the ID hapfikidacgfgnnajkgnaednpgnhmffk (docs/development.md).
+    // Public half of the key pair from `pnpm keygen`; pins the ID jmholfbgnpfgojhhghiokddfmmcnpcke (docs/development.md).
     pinnedKey: true,
     outDir: ".output",
   },
@@ -31,7 +30,7 @@ const EDITIONS = {
     name: "SplitSession: Multiple Logins per Site",
     description:
       "Use several accounts of the same site side by side in one Chrome profile. Optional local AI-agent bridge, off by default.",
-    // The store rejects a manifest with `key` and assigns the item's own ID (hhodioekcdmhpocjbkjnblmbmchddphf).
+    // A store package has no `key`: SS has no store item, this edition is unused in the fork.
     pinnedKey: false,
     outDir: ".output/store",
   },

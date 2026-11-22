@@ -18,8 +18,7 @@ const NAME = "SplitSession: Multiple Logins per Site";
 // The only extension IDs a copy may answer and ping (src/core/copies.ts): exactly these, so a test hook
 // (FACET_TEST_COPY_IDS) cannot leak into a release.
 const COPY_IDS = [
-  "hapfikidacgfgnnajkgnaednpgnhmffk", // Full, unpacked (pinned key)
-  "hhodioekcdmhpocjbkjnblmbmchddphf", // the Chrome Web Store item
+  "jmholfbgnpfgojhhghiokddfmmcnpcke", // SS fork's unpacked Full (pinned key); no store item
 ];
 // The permission increase over Lite 0.1.x that would disable the store item on update (docs/decisions.md, "The store item
 // becomes Full"). `debugger` cannot be optional, so basic mode has none; `nativeMessaging` is asked for at runtime.

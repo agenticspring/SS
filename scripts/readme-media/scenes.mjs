@@ -352,7 +352,7 @@ const FILES = { x: 267 + 22, y: 77 + 22 };
 
 const releasesHtml = `
 <div style="padding:26px 40px;font-size:15px;color:#1f2328">
-<div style="font-size:15px;color:#59636e;margin-bottom:18px">Misyuk-T / <b style="color:#1f2328">splitsession</b> / Releases</div>
+<div style="font-size:15px;color:#59636e;margin-bottom:18px">agenticspring / <b style="color:#1f2328">SS</b> / Releases</div>
 <div style="display:flex;align-items:center;gap:12px"><span style="font-size:30px;font-weight:700;letter-spacing:-.01em">v0.1.0</span><span style="border:1px solid #1a7f37;color:#1a7f37;border-radius:999px;padding:1px 10px;font-size:13px;font-weight:600">Latest</span></div>
 <div style="margin:6px 0 22px;color:#59636e">SplitSession 0.1.0: the first public release (Lite and Full).</div>
 <div style="border:1px solid #d1d9e0;border-radius:8px;overflow:hidden;font-size:15px">
@@ -450,7 +450,7 @@ export async function install(browser, cap) {
     ];
     const rel = {
       tabs: gh,
-      url: "github.com/Misyuk-T/splitsession/releases",
+      url: "github.com/agenticspring/SS/releases",
       tools: [],
       show: ["v-releases"],
     };

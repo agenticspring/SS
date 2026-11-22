@@ -7,17 +7,14 @@ import {
   findOtherCopies,
   KNOWN_COPY_IDS,
   parsePong,
-  STORE_ID,
   UNPACKED_FULL_ID,
 } from "./copies";
 
 describe("known IDs", () => {
-  it("are the store item and the unpacked Full, and tell their source", () => {
+  it("is only this fork's unpacked Full, and tells its source", () => {
     expect(KNOWN_COPY_IDS).toEqual([
-      "hhodioekcdmhpocjbkjnblmbmchddphf",
-      "hapfikidacgfgnnajkgnaednpgnhmffk",
+      "jmholfbgnpfgojhhghiokddfmmcnpcke",
     ]);
-    expect(copySource(STORE_ID)).toBe("store");
     expect(copySource(UNPACKED_FULL_ID)).toBe("unpacked");
     expect(copySource("k".repeat(32))).toBe("other");
   });
@@ -63,7 +60,7 @@ describe("answerPing", () => {
 
   it("names the edition and version of the answering copy", () => {
     expect(
-      answerPing(ping, STORE_ID, KNOWN_COPY_IDS, {
+      answerPing(ping, UNPACKED_FULL_ID, KNOWN_COPY_IDS, {
         edition: "lite",
         version: "0.2.0",
       }),
@@ -129,7 +126,7 @@ describe("findOtherCopies", () => {
       UNPACKED_FULL_ID,
       KNOWN_COPY_IDS,
     );
-    expect(calls).toEqual([[STORE_ID, ping]]);
+    expect(calls).toEqual([]); // only one known ID, and it is our own: nothing else to ping
   });
 
   it("lists a copy that answers with a pong", async () => {
@@ -137,9 +134,9 @@ describe("findOtherCopies", () => {
       id === UNPACKED_FULL_ID
         ? { type: "splitsession.pong", edition: "full", version: "0.1.4" }
         : Promise.reject(new Error("Receiving end does not exist"));
-    expect(await findOtherCopies(send, STORE_ID, KNOWN_COPY_IDS)).toEqual([
-      { id: UNPACKED_FULL_ID, edition: "full", version: "0.1.4" },
-    ]);
+    expect(
+      await findOtherCopies(send, "k".repeat(32), KNOWN_COPY_IDS),
+    ).toEqual([{ id: UNPACKED_FULL_ID, edition: "full", version: "0.1.4" }]);
   });
 
   it("ignores a junk reply", async () => {

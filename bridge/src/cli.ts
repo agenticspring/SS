@@ -13,7 +13,6 @@ import path from "node:path";
 
 import {
   ALLOWED_EXTENSION_IDS,
-  STORE_EXTENSION_ID,
   UNPACKED_EXTENSION_ID,
 } from "../../src/bridge/protocol";
 import {
@@ -70,7 +69,7 @@ usage:
 
 install  copies this program to a fixed per-user folder, registers it with the browser (Native Messaging) and with
          your AI clients. --browser may repeat or be comma separated (default: chrome). Allowed extensions: the
-         Chrome Web Store item (${STORE_EXTENSION_ID}) and the unpacked Full (${UNPACKED_EXTENSION_ID});
+         the SS unpacked Full (${UNPACKED_EXTENSION_ID});
          --extension-id adds another one (may repeat).
          --client is a comma separated list of ${CLIENT_KEYS.join(", ")}, or all, or none. Each listed client gets
          the "${MCP_NAME}" MCP server registered (its own CLI or an edit of its config file; the old file is saved as
@@ -611,7 +610,6 @@ export async function status(options: CliOptions, env: Env): Promise<number> {
       const allows = m.allowed_origins ?? [];
       log(`            allows ${allows.join(", ") || "(nothing)"}`);
       for (const [id, what] of [
-        [STORE_EXTENSION_ID, "the Chrome Web Store extension"],
         [UNPACKED_EXTENSION_ID, "the unpacked Full extension"],
       ] as const)
         log(
