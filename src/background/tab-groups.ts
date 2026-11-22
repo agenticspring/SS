@@ -146,6 +146,20 @@ export class TabGroupProjection {
     this.delay = deps.delay ?? sleep;
   }
 
+  /**
+   * False on browsers without the tab-groups APIs (Mises Browser on Android has no
+   * `chrome.tabGroups` and no `chrome.tabs.group`/`ungroup`): containers keep working,
+   * tabs are simply not grouped. Without this, every assignment would throw into the
+   * queue and spam "tab group update failed" warnings.
+   */
+  private get groupsAvailable(): boolean {
+    return (
+      !!this.deps.tabGroups &&
+      typeof this.deps.tabs.group === "function" &&
+      typeof this.deps.tabs.ungroup === "function"
+    );
+  }
+
   async load(): Promise<void> {
     const stored = (await this.deps.area.get(OWNED_GROUPS_KEY))[
       OWNED_GROUPS_KEY
@@ -195,6 +209,7 @@ export class TabGroupProjection {
    * tab that joins it later lands in this group and not in a second one.
    */
   containerOfGroup(groupId: number): Promise<ContainerId | null> {
+    if (!this.deps.tabGroups) return Promise.resolve(null);
     return this.enqueueValue(async () => {
       const group = await this.deps.tabGroups.get(groupId).catch(() => null);
       const id = group ? decodeGroupMarker(group.title) : null;
@@ -280,7 +295,7 @@ export class TabGroupProjection {
     return this.enqueue(async () => {
       const keep = this.deps.settings().tabGroups;
       // Lite has no activity marks to clean up: nothing to do with groups off.
-      if (!this.deps.tabGroups.query || (!keep && !__FULL__)) return;
+      if (!this.deps.tabGroups?.query || (!keep && !__FULL__)) return;
       const groups = await this.deps.tabGroups.query({}).catch(() => []);
       let changed = false;
       for (const group of groups) {
@@ -433,6 +448,7 @@ export class TabGroupProjection {
   }
 
   private async markerOf(groupId: number): Promise<ContainerId | null> {
+    if (!this.deps.tabGroups) return null;
     const group = await this.deps.tabGroups.get(groupId).catch(() => null);
     return group ? decodeGroupMarker(group.title) : null;
   }
@@ -443,6 +459,7 @@ export class TabGroupProjection {
     force = false,
     strict = false,
   ): Promise<void> {
+    if (!this.groupsAvailable) return; // no tab-groups API on this browser: container works ungrouped
     const split = await this.mixedSplit(tabId);
     if (split !== null) {
       // Two accounts side by side: no container group may hold the pair (docs/decisions.md, "Split view").
@@ -525,6 +542,7 @@ export class TabGroupProjection {
   }
 
   private async ungroup(tabIds: number[], strict = false): Promise<void> {
+    if (typeof this.deps.tabs.ungroup !== "function") return;
     const done = this.retrying(() => this.deps.tabs.ungroup(tabIds));
     await (strict ? done : done.catch(() => {}));
   }

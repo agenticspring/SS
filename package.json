@@ -16,6 +16,8 @@
     "build": "wxt build",
     "build:full": "wxt build",
     "build:lite": "FACET_EDITION=lite wxt build && node scripts/check-lite.mjs",
+    "build:mises": "FACET_EDITION=mises wxt build",
+    "zip:mises": "FACET_EDITION=mises wxt zip",
     "zip": "wxt zip",
     "zip:full": "wxt zip",
     "zip:lite": "FACET_EDITION=lite wxt zip && node scripts/check-lite.mjs",

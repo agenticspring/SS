@@ -58,18 +58,21 @@ export function registerListeners(
   });
   on(b.tabs.onMoved, () => events.handleLayoutChanged());
   on(b.tabs.onDetached, () => events.handleLayoutChanged());
-  on(b.tabGroups.onCreated, () => events.handleLayoutChanged());
-  on(b.tabGroups.onUpdated, () => events.handleLayoutChanged());
-  on(b.tabGroups.onRemoved, (group) => events.handleGroupRemoved(group.id));
+  // `?.` : `chrome.tabGroups` / `chrome.sessions` / `chrome.webNavigation` do not exist on some
+  // Chromium forks (Mises Browser on Android). `on()` also no-ops on a missing event; the `?.`
+  // keeps the property read itself from throwing at worker startup.
+  on(b.tabGroups?.onCreated, () => events.handleLayoutChanged());
+  on(b.tabGroups?.onUpdated, () => events.handleLayoutChanged());
+  on(b.tabGroups?.onRemoved, (group) => events.handleGroupRemoved(group.id));
   // Recently closed tabs and windows: which entry was restored just now.
-  on(b.sessions.onChanged, () => events.handleSessionsChanged());
+  on(b.sessions?.onChanged, () => events.handleSessionsChanged());
 
   const nav = b.webNavigation;
-  on(nav.onCreatedNavigationTarget, (d) =>
+  on(nav?.onCreatedNavigationTarget, (d) =>
     events.handleCreatedNavigationTarget(d),
   );
-  on(nav.onBeforeNavigate, (d) => events.handleBeforeNavigate(d));
-  on(nav.onCommitted, (d) => events.handleCommitted(d));
+  on(nav?.onBeforeNavigate, (d) => events.handleBeforeNavigate(d));
+  on(nav?.onCommitted, (d) => events.handleCommitted(d));
 
   on(b.alarms.onAlarm, (alarm) => void facet.handleAlarm(alarm.name));
   on(b.runtime.onSuspend, () => facet.handleSuspend());

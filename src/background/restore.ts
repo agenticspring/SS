@@ -247,7 +247,7 @@ export class TabRestore {
     await this.refreshSessions();
     const [tabs, groups] = await Promise.all([
       this.deps.b.tabs.query({}),
-      this.deps.b.tabGroups.query({}).catch(() => []),
+      this.deps.b.tabGroups?.query({}).catch(() => []) ?? [],
     ]);
     const live = tabs.filter((t) => t.id !== undefined);
     // Tabs that appeared while we waited: the same treatment.
@@ -552,6 +552,8 @@ export class TabRestore {
   }
 
   private async refreshSessions(): Promise<void> {
+    // `chrome.sessions` does not exist on some Chromium forks (Mises Browser on Android).
+    if (!this.deps.b.sessions) return;
     const list = await this.deps.b.sessions
       .getRecentlyClosed({ maxResults: 25 })
       .catch(() => null);
@@ -613,7 +615,7 @@ export class TabRestore {
     const [tab, tabs, groups] = await Promise.all([
       this.deps.b.tabs.get(tabId).catch(() => null),
       this.deps.b.tabs.query({}),
-      this.deps.b.tabGroups.query({}).catch(() => []),
+      this.deps.b.tabGroups?.query({}).catch(() => []) ?? [],
     ]);
     if (!this.pending.has(tabId)) return; // decided meanwhile (inherited a container, closed, chosen by the user)
     this.pending.delete(tabId);
@@ -881,7 +883,7 @@ export class TabRestore {
     if (!this.enabled || this.starting) return;
     const [tabs, groups] = await Promise.all([
       this.deps.b.tabs.query({}),
-      this.deps.b.tabGroups.query({}).catch(() => []),
+      this.deps.b.tabGroups?.query({}).catch(() => []) ?? [],
     ]);
     if (!this.enabled) return;
     this.state = buildSnapshot({

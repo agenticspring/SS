@@ -144,8 +144,9 @@ export function createExtrasApi(
   const groupRestore = new GroupRestore({
     area: b.storage.local as unknown as StorageAreaLike,
     containerCount: () => facet.containers.list().length,
+    // `chrome.tabGroups` does not exist on some Chromium forks (Mises Browser on Android).
     groups: async () =>
-      (await b.tabGroups.query({})).map((g) => ({
+      (await b.tabGroups?.query({}) ?? []).map((g) => ({
         id: g.id,
         windowId: g.windowId,
         title: g.title,

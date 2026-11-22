@@ -8,12 +8,14 @@ export function registerExtrasListeners(
   extras: Extras,
   b: typeof browser = browser,
 ): void {
+  // `?.` : `chrome.webNavigation` / `chrome.tabGroups` do not exist on some Chromium forks
+  // (Mises Browser on Android); see `on-event.ts` — an unguarded read here throws at worker startup.
   const nav = b.webNavigation;
-  on(nav.onBeforeNavigate, (d) => void extras.handleBeforeNavigate(d));
-  on(nav.onCreatedNavigationTarget, (d) =>
+  on(nav?.onBeforeNavigate, (d) => void extras.handleBeforeNavigate(d));
+  on(nav?.onCreatedNavigationTarget, (d) =>
     extras.handleCreatedNavigationTarget(d),
   );
-  on(nav.onCommitted, (d) => {
+  on(nav?.onCommitted, (d) => {
     if (d.frameId === 0) extras.handleTabRefresh(d.tabId);
   });
   on(b.tabs.onCreated, (tab) => {
@@ -43,11 +45,11 @@ export function registerExtrasListeners(
   on(b.tabs.onMoved, () => extras.handleTabLayout());
   on(b.tabs.onDetached, () => extras.handleTabLayout());
   on(
-    b.tabGroups.onRemoved,
+    b.tabGroups?.onRemoved,
     (group) =>
       void extras.ready?.then(() => extras.groups.groupRemoved(group.id)),
   );
-  on(b.tabGroups.onCreated, () => extras.handleGroupsChanged());
-  on(b.tabGroups.onUpdated, (group) => extras.handleGroupUpdated(group));
+  on(b.tabGroups?.onCreated, () => extras.handleGroupsChanged());
+  on(b.tabGroups?.onUpdated, (group) => extras.handleGroupUpdated(group));
   on(b.alarms.onAlarm, (alarm) => extras.handleAlarm(alarm.name));
 }

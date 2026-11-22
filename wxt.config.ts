@@ -44,10 +44,28 @@ const EDITIONS = {
     pinnedKey: false,
     outDir: ".output/lite",
   },
+  // SS fork only: Mises Browser on Android has no `chrome.tabGroups`, `chrome.sessions` or
+  // `chrome.webNavigation` — declaring them makes Mises refuse the install with
+  // "'sessions' is not allowed for specified platform" etc., and the background's unguarded
+  // listener registration throws, failing service-worker registration (status 15). Same code
+  // as Lite (no agent bridge / CDP), but with the pinned SS key so it keeps the SS extension
+  // ID, and without those three permissions (see the `permissions` list below). Tabs are not
+  // grouped on Mises; containers themselves work unchanged.
+  mises: {
+    full: false,
+    cdp: false,
+    name: "SplitSession (Mises)",
+    description:
+      "Use several accounts of the same site side by side in one Chrome profile.",
+    pinnedKey: true,
+    outDir: ".output/mises",
+  },
 } as const;
 type Edition = keyof typeof EDITIONS;
 const edition: Edition =
-  process.env.FACET_EDITION === "lite" || process.env.FACET_EDITION === "store"
+  process.env.FACET_EDITION === "lite" ||
+  process.env.FACET_EDITION === "store" ||
+  process.env.FACET_EDITION === "mises"
     ? process.env.FACET_EDITION
     : "full";
 const { full, cdp } = EDITIONS[edition];
@@ -158,13 +176,16 @@ export default defineConfig({
       "webRequest",
       "scripting",
       "tabs",
-      "tabGroups",
+      // Mises edition: `tabGroups`, `webNavigation` and `sessions` are not implemented on Mises
+      // Browser (Android) — declaring them blocks the install. The background guards every use
+      // of those APIs (listeners.ts, extras-listeners.ts, restore.ts, tab-groups.ts).
+      ...(edition === "mises" ? [] : ["tabGroups"]),
       "storage",
-      "webNavigation",
+      ...(edition === "mises" ? [] : ["webNavigation"]),
       "browsingData",
       "alarms",
       // Container tabs that come back: which recently-closed tab or window was just reopened (docs/decisions.md).
-      "sessions",
+      ...(edition === "mises" ? [] : ["sessions"]),
       // Full only. Agent bridge (off by default): talk to the local native host `com.splitsession.bridge` (docs/agents.md).
       // The store build asks for it at runtime instead (`optional_permissions`), so the update from Lite adds no required permission.
       ...(full && (edition !== "store" || grantNativeMessaging)
